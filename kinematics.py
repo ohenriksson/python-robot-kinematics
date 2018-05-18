@@ -6,7 +6,7 @@ class Kinematics:
         return
 
     @classmethod
-    def TCPposition(cls,a,alfa,d,angles):
+    def TCPFrame(cls,a,alfa,d,angles):
         z1 = zip(a,alfa,d,angles)
         matrices = map(lambda tup: cls.DHmatrix(tup[0], tup[1], tup[2], tup[3]), z1)
         finalPos = reduce(lambda m1,m2: m1 * m2, matrices)

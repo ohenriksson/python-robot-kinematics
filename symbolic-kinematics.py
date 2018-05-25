@@ -112,10 +112,11 @@ def solveTheta3(Pmat2, T16):
     pprint(slask)
     theta3 = solve(slask,t(3))
     pprint(theta3)
+    return theta3
 
     # pprint(simplify(eq1 - eq2 -eq3 ))
 
-def solveTheta2(T03, T06, T36):
+def solveTheta2(T03, T06, T36, theta3):
     leftM = MyInv(T03)*createPosMatrix()
     l14 = leftM.row(0).col(3)[0]
     r14 = T36.row(0).col(3)[0]
@@ -123,10 +124,13 @@ def solveTheta2(T03, T06, T36):
     r24 = T36.row(1).col(3)[0]
     eq1 = l14-r14
     eq2 = l24-r24
-    sin23 = solve(eq1,sin(t(2)+t(3)))
-    pprint(sin23)
-    cos23 = solve(eq2,cos(t(2)+t(3)))
-    pprint(cos23)
+    A, B= fraction(solve(eq1,sin(t(2)+t(3)))[0])
+    C, B= fraction(solve(eq2,cos(t(2)+t(3)))[0])
+    #assume z>0
+    theta23 = atan2(A,C)
+    theta2 = theta23 - theta3
+    return theta2
+
 
 
 
@@ -153,7 +157,7 @@ init_printing(use_unicode=True)
 T03 = T1*T2*T3
 T06 = T1*T2*T3*T4*T5*T6
 T36 = T4*T5*T6
-solveTheta2(T03,T06,T36)
+solveTheta2(T03,T06,T36,2)
 
 # T16a = T1.inv()*(T1*T2*T3*T4*T5*T6)
 # T16b = T2*T3*T4*T5*T6

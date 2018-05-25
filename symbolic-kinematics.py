@@ -96,21 +96,38 @@ def solveTheta1(Pmat2, T16):
     theta1 = solve(temp1,t(1))
     pprint(theta1)
 
-def solveTheta3(Pmat2, T16):
+def solveTheta3(T01, T16):
     print('-----theta3-------')
+    leftM = MyInv(T01)*createPosMatrix()
     px = T16.row(0).col(3)[0]
     py = T16.row(1).col(3)[0]
     pz = T16.row(2).col(3)[0]
-    eq1 =  - pow(px,2) + pow(Pmat2.row(0).col(3)[0],2)
-    eq2 =  - pow(py,2) + pow(Pmat2.row(1).col(3)[0],2)
-    eq3 =  - pow(pz,2) + pow(Pmat2.row(2).col(3)[0],2)
-    pprint(simplify(eq1))
-    pprint(simplify(eq2))
-    pprint(simplify(eq3))
-    print('-----')
-    slask = simplify(-eq1-eq2-eq3)
+    l14 = leftM.row(0).col(3)[0]
+    l24 = leftM.row(1).col(3)[0]
+    l34 = leftM.row(2).col(3)[0]
+
+    pprint(l14)
+    pprint(simplify(px))
+    print('------')
+    pprint(l24)
+    pprint(simplify(py))
+    print('------')
+    pprint(l34)
+    pprint(simplify(pz))
+    print('------')
+
+    eqx = l14-px
+    eqy = l24-py
+    eqz = l34-pz
+    print('------')
+
+    eq4 = eqx-eqy-eqz
+    slask = simplify(eq4)
     pprint(slask)
-    theta3 = solve(slask,t(3))
+
+    return
+    pprint(slask)
+    theta3 = solve(slask,sin(t(3))/cos(t(3)))
     pprint(theta3)
     return theta3
 
@@ -204,18 +221,19 @@ init_printing(use_unicode=True)
 # #the real T16 matrix
 # T16 = simplify(T2*T3*T4*T5*T6)
 
-T06 = T1*T2*T3*T4*T5*T6
-    # Pmat2 = MyInv(T1)*Pmat
-# solveTheta1(Pmat2, T16)
-# solveTheta3(Pmat2, T16)
+#  solveTheta1(Pmat2, T16)
+
+T01 = T1
+T16 = T2*T3*T4*T5*T6
+solveTheta3(T01, T16)
 
 T03 = T1*T2*T3
 T36 = T4*T5*T6
 # solveTheta2(T03,T06,T36,2)
 
-T03 = T1*T2*T3
-T36 = T4*T5*T6
-solveTheta4(T03,T36,'t1','t2','t3')
+# T03 = T1*T2*T3
+# T36 = T4*T5*T6
+# solveTheta4(T03,T36,'t1','t2','t3')
 
 # T04 = T1*T2*T3*T4
 # T46 = T5*T6

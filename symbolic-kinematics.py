@@ -117,6 +117,7 @@ def solveTheta3(Pmat2, T16):
     # pprint(simplify(eq1 - eq2 -eq3 ))
 
 def solveTheta2(T03, T06, T36, theta3):
+    print('-----theta2-------')
     leftM = MyInv(T03)*createPosMatrix()
     l14 = leftM.row(0).col(3)[0]
     r14 = T36.row(0).col(3)[0]
@@ -129,10 +130,38 @@ def solveTheta2(T03, T06, T36, theta3):
     #assume z>0
     theta23 = atan2(A,C)
     theta2 = theta23 - theta3
+    pprint(theta2)
     return theta2
 
 
+def solveTheta5(T04, T06, T46, theta1, theta2, theta3, theta4):
+    print('-----theta5-------')
+    leftM = MyInv(T04)*createPosMatrix()
+    c = 2
+    l13 = leftM.row(0).col(c)[0]
+    r13 = T46.row(0).col(c)[0]
+    l33 = leftM.row(2).col(c)[0]
+    r33 = T46.row(2).col(c)[0]
+    s5 = solve(l13-r13,sin(t(5)))[0]
+    c5 = solve(l33-r33,cos(t(5)))[0]
+    theta5 = atan2(s5,c5)
+    pprint(theta5)
+    return theta5
 
+
+def solveTheta6(T05, T06, T56, theta1, theta2, theta3, theta4, theta5):
+    print('-----theta6-------')
+    leftM = MyInv(T05)*createPosMatrix()
+    c = 0
+    l11 = leftM.row(0).col(c)[0]
+    r11 = T56.row(0).col(c)[0]
+    l31 = leftM.row(2).col(c)[0]
+    r31 = T56.row(2).col(c)[0]
+    c6 = solve(l11-r11,cos(t(6)))[0]
+    s6 = solve(l31-r31,sin(t(6)))[0]
+    theta6 = atan2(s6,c6)
+    pprint(theta6)
+    return theta6
 
 
 
@@ -151,14 +180,22 @@ init_printing(use_unicode=True)
 # #the real T16 matrix
 # T16 = simplify(T2*T3*T4*T5*T6)
 
+T06 = T1*T2*T3*T4*T5*T6
     # Pmat2 = MyInv(T1)*Pmat
 # solveTheta1(Pmat2, T16)
 # solveTheta3(Pmat2, T16)
-T03 = T1*T2*T3
-T06 = T1*T2*T3*T4*T5*T6
-T36 = T4*T5*T6
-solveTheta2(T03,T06,T36,2)
 
+T03 = T1*T2*T3
+T36 = T4*T5*T6
+# solveTheta2(T03,T06,T36,2)
+
+# T04 = T1*T2*T3*T4
+# T46 = T5*T6
+# solveTheta5(T04,T06,T46,'t1','t2','t3','t4')
+
+T05 = T1*T2*T3*T4*T5
+T56 = T6
+solveTheta6(T05,T06,T56,'t1','t2','t3','t4', 't5')
 # T16a = T1.inv()*(T1*T2*T3*T4*T5*T6)
 # T16b = T2*T3*T4*T5*T6
 # cella =(T16a.col(3).row(1))

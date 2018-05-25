@@ -83,6 +83,54 @@ def printall():
         # print(str1 + latex(getmatrix(x)) +str2)
         pprint(getmatrix(x))
 
+def createPosMatrix():
+    x, y, z = symbols('x y z')
+    Pmat = eye(4)
+    Pmat[0:3,3] = Matrix([[x,y,z]]).T
+    return Pmat
+
+def solveTheta1(Pmat2, T16):
+    print('-----theta1-------')
+    py = T16.row(1).col(3)[0]
+    temp1 = Pmat2.row(1).col(3)[0] - py
+    theta1 = solve(temp1,t(1))
+    pprint(theta1)
+
+def solveTheta3(Pmat2, T16):
+    print('-----theta3-------')
+    px = T16.row(0).col(3)[0]
+    py = T16.row(1).col(3)[0]
+    pz = T16.row(2).col(3)[0]
+    eq1 =  - pow(px,2) + pow(Pmat2.row(0).col(3)[0],2)
+    eq2 =  - pow(py,2) + pow(Pmat2.row(1).col(3)[0],2)
+    eq3 =  - pow(pz,2) + pow(Pmat2.row(2).col(3)[0],2)
+    pprint(simplify(eq1))
+    pprint(simplify(eq2))
+    pprint(simplify(eq3))
+    print('-----')
+    slask = simplify(-eq1-eq2-eq3)
+    pprint(slask)
+    theta3 = solve(slask,t(3))
+    pprint(theta3)
+
+    # pprint(simplify(eq1 - eq2 -eq3 ))
+
+def solveTheta2(T03, T06, T36):
+    leftM = MyInv(T03)*createPosMatrix()
+    l14 = leftM.row(0).col(3)[0]
+    r14 = T36.row(0).col(3)[0]
+    l24 = leftM.row(1).col(3)[0]
+    r24 = T36.row(1).col(3)[0]
+    eq1 = l14-r14
+    eq2 = l24-r24
+    sin23 = solve(eq1,sin(t(2)+t(3)))
+    pprint(sin23)
+    cos23 = solve(eq2,cos(t(2)+t(3)))
+    pprint(cos23)
+
+
+
+
 
 #matrices
 T1 = getmatrix(1)
@@ -95,35 +143,17 @@ T6 = getmatrix(6)
 init_printing(use_unicode=True)
 
 #the T16 matrix:
-x, y, z = symbols('x y z')
-Pmat = eye(4)
-Pmat[0:3,3] = Matrix([[x,y,z]]).T
-Pmat2 = MyInv(T1)*Pmat
 
-#the real T16 matrix
-T16 = simplify(T2*T3*T4*T5*T6)
+# #the real T16 matrix
+# T16 = simplify(T2*T3*T4*T5*T6)
 
-# theta1 -------------
-temp1 = Pmat2.row(1).col(3)[0]
-theta1 = solveset(temp1,t(1))
-pprint(theta1)
-
-# theta 3 -----------
-
-px = T16.row(0).col(3)[0]
-py = T16.row(2).col(3)[0]
-eq1 = px - Pmat2.row(0).col(3)[0]
-eq2 = py - Pmat2.row(2).col(3)[0]
-eq3 = Pmat2.row(1).col(3)[0]
-eq1 = pow(eq1,2)
-eq2 = pow(eq2,2)
-eq3 = pow(eq3,2)
-pprint(eq1)
-pprint(eq2)
-pprint(eq3)
-
-eq4 = simplify(eq1 -eq2- eq3)
-pprint(eq4)
+    # Pmat2 = MyInv(T1)*Pmat
+# solveTheta1(Pmat2, T16)
+# solveTheta3(Pmat2, T16)
+T03 = T1*T2*T3
+T06 = T1*T2*T3*T4*T5*T6
+T36 = T4*T5*T6
+solveTheta2(T03,T06,T36)
 
 # T16a = T1.inv()*(T1*T2*T3*T4*T5*T6)
 # T16b = T2*T3*T4*T5*T6

@@ -8,6 +8,7 @@ mpmath.mp.pretty = True
 class c(Function):
     @classmethod
     def eval(cls,x):
+        # return cos(x)
         if x == pi/2: return 0
         if x == -pi/2: return 0
         if x == 0:    return 1
@@ -17,6 +18,7 @@ class c(Function):
 class s(Function):
     @classmethod
     def eval(cls,x):
+        # return sin(x)
         if x == pi/2: return 1
         if x == -pi/2: return -1
         if x == 0:    return 0
@@ -106,20 +108,6 @@ def solveTheta3(T01, T16):
     l24 = leftM.row(1).col(3)[0]
     l34 = leftM.row(2).col(3)[0]
 
-
-    # a1 = c(t(1))*x + s(t(1))*y -a(1)
-    # a2 = a(3)*c(t(2)+t(3)) - d(4)*s(t(2)+t(3)) + a(2)*c(t(2))
-    # b1 = z
-    # b2 = a(3)*s(t(2)+t(3)) + d(4)*c(t(2)+t(3)) + a(2)*s(t(2))
-    # c1 = -s(t(1))*x + c(t(1))*y
-    # c2 = d(3)
-
-    # aa = simplify(pow(a1,2)-pow(a2,2))
-    # bb = simplify(pow(b1,2)-pow(b2,2))
-    # cc = simplify(pow(c1,2)-pow(c2,2))
-    
-    # pprint(simplify(aa + bb + cc))
-
     l14 = l14 -a(1)
     px = px - a(1)
 
@@ -128,17 +116,22 @@ def solveTheta3(T01, T16):
     eqz = pow(l34,2)-pow(pz,2)
     print('------')
 
-    eq4 = eqx+eqy+eqz
-    slask = simplify(eq4)
-    pprint(slask)
+    eq4 = Eq(simplify(eqx+eqy+eqz),0)
+    pprint(eq4)
+    lhs = 2*a(2) * (a(3)*c(t(3)) - d(4)*s(t(3))) 
+    rhs = a(1)**2 - a(3)**2 -d(4)**2 + x**2 + y**2 -a(2)**2 + z**2 - 2*a(1)*x*c(t(1)) - 2*a(1) *y *s(t(1)) 
+    lhs = solve(eq4,rhs)[0]
 
-    return
-    pprint(slask)
-    theta3 = solve(slask,sin(t(3))/cos(t(3)))
-    pprint(theta3)
-    return theta3
+    lhs = lhs/(2*a(2))
+    K = rhs/(2*a(2))
+    # slask = solve(eq4,     slask = solve(eq4, (d(4)*s(t(3))) )
+    pprint(lhs)
+    pprint(K)
 
-    # pprint(simplify(eq1 - eq2 -eq3 ))
+    theta3a = atan2(a(3),d(4)) - atan2(K,+sqrt(a(3)**2+d(3)**2-K**2))
+    theta3b = atan2(a(3),d(4)) - atan2(K,-sqrt(a(3)**2+d(3)**2-K**2))
+    return theta3a
+
 
 def solveTheta2(T03, T36, theta3):
     print('-----theta2-------')

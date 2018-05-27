@@ -205,7 +205,7 @@ def solveTheta2(T03, T36):
     # return theta2
 
 
-def solveTheta4(T03, T36, theta1,theta2,theta3):
+def solveTheta4(T03, T36):
     print('-----theta4-------')
     leftM = MyInv(T03)*createPosMatrix()
     c = 2
@@ -213,23 +213,23 @@ def solveTheta4(T03, T36, theta1,theta2,theta3):
     r13 = T36.row(0).col(c)[0]
     l33 = leftM.row(2).col(c)[0]
     r33 = T36.row(2).col(c)[0]
-    eq1 = l13-r13
-    eq2 = l33-r33
-    pprint(eq1)
-    pprint(eq2)
+    eq1 = Eq(l13,r13)
+    eq2 = Eq(l33,r33)
+
+    print(latex(eq1))
+    print(latex(eq2))
 
     c4 = solve(eq1, cos(t(4))*sin(t(5)))[0]
     s4 = solve(eq2, sin(t(4))*sin(t(5)))[0]
 
     #assume s5!=0 #singularity
-    theta4 = atan2(c4,s4)
-    theta4 = 0
+    theta4 = Eq(t(4),atan2(s4,c4))
     pprint(theta4)
-    theta4b = theta4 + pi
+    print(latex(theta4))
     return theta4
 
 
-def solveTheta5(T04, T46, theta1, theta2, theta3, theta4):
+def solveTheta5(T04, T46):
     print('-----theta5-------')
     leftM = MyInv(T04)*createPosMatrix()
     c = 2
@@ -239,12 +239,15 @@ def solveTheta5(T04, T46, theta1, theta2, theta3, theta4):
     r33 = T46.row(2).col(c)[0]
     s5 = solve(l13-r13,sin(t(5)))[0]
     c5 = solve(l33-r33,cos(t(5)))[0]
-    theta5 = atan2(s5,c5)
-    theta5b = -theta5
+    theta5 = Eq(t(5),atan2(s5,c5))
+
+    pprint(theta5)
+    print(latex(theta5))
+
     return theta5
 
 
-def solveTheta6(T05, T56, theta1, theta2, theta3, theta4, theta5):
+def solveTheta6(T05, T56):
     print('-----theta6-------')
     leftM = MyInv(T05)*createPosMatrix()
     c = 0
@@ -254,8 +257,10 @@ def solveTheta6(T05, T56, theta1, theta2, theta3, theta4, theta5):
     r31 = T56.row(2).col(c)[0]
     c6 = solve(l11-r11,cos(t(6)))[0]
     s6 = solve(l31-r31,sin(t(6)))[0]
-    theta6 = atan2(s6,c6)
-    theta6b = theta6 + pi
+    theta6 = Eq(t(6),atan2(s6,c6))
+
+    pprint(theta6)
+    print(latex(theta6))
     return theta6
 
 
@@ -287,21 +292,23 @@ T16 = T2*T3*T4*T5*T6
 # solveTheta1(T1, T16)
 # solveTheta3(T01, T16)
 
-T03 = T1*T2*T3
-T36 = T4*T5*T6
-solveTheta2(T03,T36)
+# T03 = T1*T2*T3
+# T36 = T4*T5*T6
+# solveTheta2(T03,T36)
 
 # T03 = T1*T2*T3
 # T36 = T4*T5*T6
-# solveTheta4(T03,T36,'t1','t2','t3')
+# solveTheta4(T03,T36)
 
 # T04 = T1*T2*T3*T4
 # T46 = T5*T6
-# solveTheta5(T04,T06,T46,'t1','t2','t3','t4')
+# solveTheta5(T04,T46)
 
-# T05 = T1*T2*T3*T4*T5
-# T56 = T6
-# solveTheta6(T05,T56,'t1','t2','t3','t4', 't5')
+T05 = T1*T2*T3*T4*T5
+T56 = T6
+solveTheta6(T05,T56)
+
+
 # T16a = T1.inv()*(T1*T2*T3*T4*T5*T6)
 # T16b = T2*T3*T4*T5*T6
 # cella =(T16a.col(3).row(1))

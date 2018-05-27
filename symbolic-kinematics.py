@@ -106,22 +106,29 @@ def solveTheta3(T01, T16):
     l24 = leftM.row(1).col(3)[0]
     l34 = leftM.row(2).col(3)[0]
 
-    pprint(l14)
-    pprint(simplify(px))
-    print('------')
-    pprint(l24)
-    pprint(simplify(py))
-    print('------')
-    pprint(l34)
-    pprint(simplify(pz))
+
+    # a1 = c(t(1))*x + s(t(1))*y -a(1)
+    # a2 = a(3)*c(t(2)+t(3)) - d(4)*s(t(2)+t(3)) + a(2)*c(t(2))
+    # b1 = z
+    # b2 = a(3)*s(t(2)+t(3)) + d(4)*c(t(2)+t(3)) + a(2)*s(t(2))
+    # c1 = -s(t(1))*x + c(t(1))*y
+    # c2 = d(3)
+
+    # aa = simplify(pow(a1,2)-pow(a2,2))
+    # bb = simplify(pow(b1,2)-pow(b2,2))
+    # cc = simplify(pow(c1,2)-pow(c2,2))
+    
+    # pprint(simplify(aa + bb + cc))
+
+    l14 = l14 -a(1)
+    px = px - a(1)
+
+    eqx = pow(l14,2)-pow(px,2)
+    eqy = pow(l24,2)-pow(py,2)
+    eqz = pow(l34,2)-pow(pz,2)
     print('------')
 
-    eqx = l14-px
-    eqy = l24-py
-    eqz = l34-pz
-    print('------')
-
-    eq4 = eqx-eqy-eqz
+    eq4 = eqx+eqy+eqz
     slask = simplify(eq4)
     pprint(slask)
 
